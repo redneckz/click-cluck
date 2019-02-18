@@ -11,6 +11,10 @@ export function ClickCluck(target, timeout = 500) {
     },
 
     set onclick(listener) {
+      if (onclick === listener) {
+        // Nothing changed, nothing to do
+        return;
+      }
       onclick = listener;
       target.onclick = (event) => {
         if (event.detail === 1) { // First click
@@ -24,6 +28,10 @@ export function ClickCluck(target, timeout = 500) {
     },
 
     set ondblclick(listener) {
+      if (ondblclick === listener) {
+        // Nothing changed, nothing to do
+        return;
+      }
       ondblclick = listener;
       target.ondblclick = (event) => {
         preventClick();

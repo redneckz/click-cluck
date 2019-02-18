@@ -79,4 +79,24 @@ describe('ClickCluck', () => {
     targetCC.ondblclick = ondblclick;
     expect(targetCC.ondblclick).toBe(ondblclick);
   });
+
+  it('should cache onclick listener and do not touch target if nothing changed', () => {
+    const listener = () => {};
+    targetCC.onclick = listener;
+    const underlyingListener = target.onclick;
+    targetCC.onclick = listener; // Nothing changed
+    expect(target.onclick).toBe(underlyingListener);
+    targetCC.onclick = () => {}; // New listener
+    expect(target.onclick).not.toBe(underlyingListener);
+  });
+
+  it('should cache ondblclick listener and do not touch target if nothing changed', () => {
+    const listener = () => {};
+    targetCC.ondblclick = listener;
+    const underlyingListener = target.ondblclick;
+    targetCC.ondblclick = listener; // Nothing changed
+    expect(target.ondblclick).toBe(underlyingListener);
+    targetCC.ondblclick = () => {}; // New listener
+    expect(target.ondblclick).not.toBe(underlyingListener);
+  });
 });
