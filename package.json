@@ -33,7 +33,7 @@
   },
   "scripts": {
     "prepublish": "npm run build",
-    "prebuild": "npm run eslint && npm run jest && npm run clean",
+    "prebuild": "npm run clean && npm run eslint && npm run jest",
     "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "cross-env NODE_ENV=cjs react-lib-build",
     "build:es": "cross-env NODE_ENV=es react-lib-build",
