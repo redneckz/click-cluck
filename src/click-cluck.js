@@ -16,11 +16,7 @@ export function ClickCluck(target, timeout = 500) {
         return;
       }
       onclick = listener;
-      target.onclick = (event) => {
-        if (event.detail === 1) { // First click
-          setupClick(() => listener(event));
-        }
-      };
+      target.onclick = createClickHandler(listener);
     },
 
     get ondblclick() {
@@ -33,18 +29,38 @@ export function ClickCluck(target, timeout = 500) {
         return;
       }
       ondblclick = listener;
-      target.ondblclick = (event) => {
-        preventClick();
-        listener(event);
-      };
+      target.ondblclick = createDoubleClickHandler(listener);
     },
   };
+
+  function createClickHandler(listener) {
+    if (typeof listener !== 'function') {
+      // Invalid or empty listener provided
+      return undefined; // Return empty listener
+    }
+    return (event) => {
+      if (event.detail === 1) { // First click
+        setupClick(() => listener(event));
+      }
+    };
+  }
 
   function setupClick(callback) {
     timerId = setTimeout(() => {
       timerId = undefined;
       callback();
     }, timeout);
+  }
+
+  function createDoubleClickHandler(listener) {
+    if (typeof listener !== 'function') {
+      // Invalid or empty listener provided
+      return undefined; // Return empty listener
+    }
+    return (event) => {
+      preventClick();
+      listener(event);
+    };
   }
 
   function preventClick() {

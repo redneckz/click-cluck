@@ -99,4 +99,18 @@ describe('ClickCluck', () => {
     targetCC.ondblclick = () => {}; // New listener
     expect(target.ondblclick).not.toBe(underlyingListener);
   });
+
+  it('should clear onclick listener on target if empty listener provided', () => {
+    targetCC.onclick = () => {};
+    expect(target.onclick).toBeInstanceOf(Function);
+    targetCC.onclick = undefined; // Empty listener
+    expect(target.onclick).toBe(undefined);
+  });
+
+  it('should clear ondblclick listener on target if empty listener provided', () => {
+    targetCC.ondblclick = () => {};
+    expect(target.ondblclick).toBeInstanceOf(Function);
+    targetCC.ondblclick = undefined; // Empty listener
+    expect(target.ondblclick).toBe(undefined);
+  });
 });
