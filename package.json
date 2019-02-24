@@ -1,6 +1,6 @@
 {
   "name": "@redneckz/click-cluck",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Alexander Alexandrov",
   "description": "Postpones click event to prevent it in case of dblclick event",
   "keywords": [
