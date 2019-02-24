@@ -1,4 +1,11 @@
-export function ClickCluck(target, timeout = 500) {
+const MACOS_DBLCLICK_TIMEOUT = 500; // 500ms
+const WIN_DBLCLICK_TIMEOUT = 500; // 500ms
+const DEFAULT_DBLCLICK_TIMEOUT = Math.max(
+  MACOS_DBLCLICK_TIMEOUT,
+  WIN_DBLCLICK_TIMEOUT,
+);
+
+export function ClickCluck(target, timeout = DEFAULT_DBLCLICK_TIMEOUT) {
   // Names were chosen according to spec
   let onclick;
   let ondblclick;
@@ -39,17 +46,13 @@ export function ClickCluck(target, timeout = 500) {
       return undefined; // Return empty listener
     }
     return (event) => {
-      if (event.detail === 1) { // First click
+      if (
+        !event.detail // No data about click sequential number (IE)
+        || event.detail === 1 // Postpone only first/standalone click
+      ) {
         setupClick(() => listener(event));
       }
     };
-  }
-
-  function setupClick(callback) {
-    timerId = setTimeout(() => {
-      timerId = undefined;
-      callback();
-    }, timeout);
   }
 
   function createDoubleClickHandler(listener) {
@@ -61,6 +64,14 @@ export function ClickCluck(target, timeout = 500) {
       preventClick();
       listener(event);
     };
+  }
+
+  function setupClick(callback) {
+    preventClick(); // Prevent previous click in sequence
+    timerId = setTimeout(() => {
+      timerId = undefined;
+      callback();
+    }, timeout);
   }
 
   function preventClick() {
